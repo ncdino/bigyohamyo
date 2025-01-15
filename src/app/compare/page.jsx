@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import Compare from '@/components/SuspenseSection/compare.client'
+import Compare from '@/components/SuspenseSection/Compare-client'
 
 export default function ComparePage() {
     return (

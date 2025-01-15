@@ -1,4 +1,4 @@
-import WetCompare from '@/components/SuspenseSection/WetCompare.client'
+import WetCompare from '@/components/SuspenseSection/WetCompare-client'
 import { Suspense } from 'react'
 
 export default function WetComparePage() {
