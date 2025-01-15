@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@svgr/webpack": "^8.1.0",
     "@tanstack/react-query": "^5.62.8",
     "framer-motion": "^11.14.4",
     "gsap": "^3.12.5",
