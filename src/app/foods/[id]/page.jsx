@@ -230,16 +230,19 @@ export default function FoodDetail({ params: paramsPromise }) {
                                                 label: '탄수화물',
                                                 value: food.C,
                                                 color: '#85A389',
+                                                maxValue: 100,
                                             },
                                             {
                                                 label: '단백질',
                                                 value: food.P,
                                                 color: '#A2CDB0',
+                                                maxValue: 100,
                                             },
                                             {
                                                 label: '지방',
                                                 value: food.F,
                                                 color: '#FFD89C',
+                                                maxValue: 100,
                                             },
                                         ].map((item, index) => (
                                             <div key={index}>
@@ -249,6 +252,7 @@ export default function FoodDetail({ params: paramsPromise }) {
                                                     animated={true}
                                                     className="w-50 h-50 lg:w-200 lg:h-200"
                                                     size={nutSize}
+                                                    maxValue={item.maxValue}
                                                 />
                                                 <div className="text-center mt-4 text-xl md:text-2xl lg:text-4xl font-extrabold">
                                                     <p className="font-light text-xl md:text-2xl lg:text-3xl mb-0.5">
