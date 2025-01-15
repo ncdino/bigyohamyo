@@ -3,7 +3,7 @@
 import searchData from '@/app/data/food.json'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import { motion } from 'framer-motion'
 import ProductDetailCard from '@/components/Card/ProductDetailCard'
 import UpArrow from '@/components/svg/UpArrow'
@@ -244,140 +244,142 @@ export default function Compare() {
     }
 
     return (
-        <div className="bg-gradient-to-r from-[#000046] to-[#1CB5E0] min-h-screen font-paperlogy">
-            <div className="p-2">
-                <Menu />
-            </div>
-            <GoBackButton onClick={handleClick} />
-            <div className="container py-14 lg:py-28">
-                {isOn ? (
-                    <div className="gap-4 md:gap-6 lg:gap-8">
-                        <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8 grid-rows-[1fr]">
-                            <div className="text-center col-span-1">
-                                <ProductDetailCard className="text-red-900 bg-red-500 h-full">
-                                    <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold">
-                                        <Link href={`/foods/${foodA.id}`}>
-                                            {foodA.제품명}
-                                        </Link>
-                                    </h1>
-                                    <h2 className="text-lg md:text-xl lg:text-2xl font-semibold py-2 md:py-3 lg:py-5">
-                                        {foodA.브랜드}
-                                    </h2>
-                                </ProductDetailCard>
+        <Suspense fallback={<div>Suspense 로딩</div>}>
+            <div className="bg-gradient-to-r from-[#000046] to-[#1CB5E0] min-h-screen font-paperlogy">
+                <div className="p-2">
+                    <Menu />
+                </div>
+                <GoBackButton onClick={handleClick} />
+                <div className="container py-14 lg:py-28">
+                    {isOn ? (
+                        <div className="gap-4 md:gap-6 lg:gap-8">
+                            <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8 grid-rows-[1fr]">
+                                <div className="text-center col-span-1">
+                                    <ProductDetailCard className="text-red-900 bg-red-500 h-full">
+                                        <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold">
+                                            <Link href={`/foods/${foodA.id}`}>
+                                                {foodA.제품명}
+                                            </Link>
+                                        </h1>
+                                        <h2 className="text-lg md:text-xl lg:text-2xl font-semibold py-2 md:py-3 lg:py-5">
+                                            {foodA.브랜드}
+                                        </h2>
+                                    </ProductDetailCard>
+                                </div>
+                                <div className="text-center col-span-1">
+                                    <ProductDetailCard className="bg-blue-500 text-blue-900 text-center h-full">
+                                        <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold">
+                                            <Link href={`/foods/${foodB.id}`}>
+                                                {foodB.제품명}
+                                            </Link>
+                                        </h1>
+                                        <h2 className="text-lg md:text-xl lg:text-2xl font-semibold py-2 md:py-3 lg:py-5">
+                                            {foodB.브랜드}
+                                        </h2>
+                                    </ProductDetailCard>
+                                </div>
                             </div>
-                            <div className="text-center col-span-1">
-                                <ProductDetailCard className="bg-blue-500 text-blue-900 text-center h-full">
-                                    <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold">
-                                        <Link href={`/foods/${foodB.id}`}>
-                                            {foodB.제품명}
-                                        </Link>
-                                    </h1>
-                                    <h2 className="text-lg md:text-xl lg:text-2xl font-semibold py-2 md:py-3 lg:py-5">
-                                        {foodB.브랜드}
-                                    </h2>
-                                </ProductDetailCard>
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-4 gap-4 md:gap-6 lg:gap-8 mt-8">
-                            <div className="grid col-span-4 md:col-span-2 grid-cols-2 gap-4 md:gap-8 justify-center items-center">
-                                {CompareItemA(foodA, foodB, '탄수화물')}
-                                {CompareItemA(foodA, foodB, '단백질')}
-                                {CompareItemA(foodA, foodB, '지방')}
-                                {CompareItemA(foodA, foodB, '조섬유')}
-                                {CompareItemA(foodA, foodB, '조회분')}
-                                {CompareItemA(foodA, foodB, '수분')}
-                            </div>
-                            <div className="flex flex-col gap-8 col-span-4 md:col-span-2">
-                                <ProductDetailCard className="tracking-tighter">
-                                    <div className="grid md:grid-cols-4">
-                                        <div className="flex flex-col justify-center items-center md:col-span-2">
-                                            <MoneyGaugeChart
-                                                value={
-                                                    foodA['100g당가격'] -
-                                                    foodB['100g당가격']
-                                                }
-                                                maxValue={100}
-                                                size={200}
-                                            />
-                                            {/* <p className="text-2xl text-center font-light text-gray-800">
+                            <div className="grid grid-cols-4 gap-4 md:gap-6 lg:gap-8 mt-8">
+                                <div className="grid col-span-4 md:col-span-2 grid-cols-2 gap-4 md:gap-8 justify-center items-center">
+                                    {CompareItemA(foodA, foodB, '탄수화물')}
+                                    {CompareItemA(foodA, foodB, '단백질')}
+                                    {CompareItemA(foodA, foodB, '지방')}
+                                    {CompareItemA(foodA, foodB, '조섬유')}
+                                    {CompareItemA(foodA, foodB, '조회분')}
+                                    {CompareItemA(foodA, foodB, '수분')}
+                                </div>
+                                <div className="flex flex-col gap-8 col-span-4 md:col-span-2">
+                                    <ProductDetailCard className="tracking-tighter">
+                                        <div className="grid md:grid-cols-4">
+                                            <div className="flex flex-col justify-center items-center md:col-span-2">
+                                                <MoneyGaugeChart
+                                                    value={
+                                                        foodA['100g당가격'] -
+                                                        foodB['100g당가격']
+                                                    }
+                                                    maxValue={100}
+                                                    size={200}
+                                                />
+                                                {/* <p className="text-2xl text-center font-light text-gray-800">
                                                 {Math.abs(
                                                     foodA['100g당가격'] -
                                                         foodB['100g당가격'],
                                                 ).toFixed(0)}
                                                 원
                                             </p> */}
-                                        </div>
-                                        <div className="flex flex-col justify-center items-center md:col-span-2">
-                                            <p className="font-light text-2xl md:text-3xl lg:text-4xl">
-                                                100G 당,
-                                            </p>
-                                            <div className="justify-center items-center text-4xl lg:text-5xl mt-2 lg:mt-5 text-center font-extrabold gap-8 inline-flex">
-                                                <p className="text-red-500">
-                                                    {foodA[
-                                                        '100g당가격'
-                                                    ].toFixed(0)}
-                                                    원
+                                            </div>
+                                            <div className="flex flex-col justify-center items-center md:col-span-2">
+                                                <p className="font-light text-2xl md:text-3xl lg:text-4xl">
+                                                    100G 당,
                                                 </p>
-                                                <p className="text-blue-500">
-                                                    {foodB[
-                                                        '100g당가격'
-                                                    ].toFixed(0)}
-                                                    원
-                                                </p>
+                                                <div className="justify-center items-center text-4xl lg:text-5xl mt-2 lg:mt-5 text-center font-extrabold gap-8 inline-flex">
+                                                    <p className="text-red-500">
+                                                        {foodA[
+                                                            '100g당가격'
+                                                        ].toFixed(0)}
+                                                        원
+                                                    </p>
+                                                    <p className="text-blue-500">
+                                                        {foodB[
+                                                            '100g당가격'
+                                                        ].toFixed(0)}
+                                                        원
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </ProductDetailCard>
-                                <ProductDetailCard>
-                                    <div className="grid grid-cols-1 md:grid-cols-4 justify-between items-center gap-4">
-                                        <div className="flex flex-col md:col-span-2 justify-center items-center">
-                                            <FeedPriceChart
-                                                value={calComparison}
-                                                maxValue={10}
-                                                size={150}
-                                            />
+                                    </ProductDetailCard>
+                                    <ProductDetailCard>
+                                        <div className="grid grid-cols-1 md:grid-cols-4 justify-between items-center gap-4">
+                                            <div className="flex flex-col md:col-span-2 justify-center items-center">
+                                                <FeedPriceChart
+                                                    value={calComparison}
+                                                    maxValue={10}
+                                                    size={150}
+                                                />
 
-                                            {/* <div className="flex justify-center text-2xl">
+                                                {/* <div className="flex justify-center text-2xl">
                                                 {calComparison} %
                                             </div> */}
-                                        </div>
-                                        <div className="md:col-span-2 flex justify-center text-center gap-8">
-                                            <div>
-                                                <p className="font-extrabold text-red-500 text-4xl lg:text-5xl">
-                                                    {foodA.열량}
-                                                </p>
-                                                <p className="text-4xl font-extralight text-gray-800">
-                                                    kcal.
-                                                </p>
                                             </div>
-                                            <div>
-                                                <p className="font-extrabold text-blue-500 text-4xl lg:text-5xl">
-                                                    {foodB.열량}
-                                                </p>
-                                                <p className="text-4xl font-extralight text-gray-800">
-                                                    kcal.
-                                                </p>
+                                            <div className="md:col-span-2 flex justify-center text-center gap-8">
+                                                <div>
+                                                    <p className="font-extrabold text-red-500 text-4xl lg:text-5xl">
+                                                        {foodA.열량}
+                                                    </p>
+                                                    <p className="text-4xl font-extralight text-gray-800">
+                                                        kcal.
+                                                    </p>
+                                                </div>
+                                                <div>
+                                                    <p className="font-extrabold text-blue-500 text-4xl lg:text-5xl">
+                                                        {foodB.열량}
+                                                    </p>
+                                                    <p className="text-4xl font-extralight text-gray-800">
+                                                        kcal.
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </ProductDetailCard>
+                                    </ProductDetailCard>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ) : (
-                    <>
-                        <ProductDetailCard className="overflow-x-auto">
-                            <CompareTable
-                                product1={foodA}
-                                product2={foodB}
-                                isOn={false}
-                            />
-                        </ProductDetailCard>
-                    </>
-                )}
+                    ) : (
+                        <>
+                            <ProductDetailCard className="overflow-x-auto">
+                                <CompareTable
+                                    product1={foodA}
+                                    product2={foodB}
+                                    isOn={false}
+                                />
+                            </ProductDetailCard>
+                        </>
+                    )}
 
-                <ToggleButton isOn={isOn} toggleSwitch={toggleSwitch} />
+                    <ToggleButton isOn={isOn} toggleSwitch={toggleSwitch} />
+                </div>
             </div>
-        </div>
+        </Suspense>
     )
 }

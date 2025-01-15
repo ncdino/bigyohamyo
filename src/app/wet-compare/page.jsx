@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import searchData from '@/app/data/wet_output.json'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import { motion } from 'framer-motion'
 import ProductDetailCard from '@/components/Card/ProductDetailCard'
 import FeedPriceChart from '@/components/Chart/FeedPriceChart'
@@ -294,6 +294,7 @@ export default function WetCompare() {
         queryKey: ['wetFood', food1, food2],
         queryFn: () => fetchFoodsByIds([food1, food2]),
         staleTime: 60 * 60 * 1000,
+        suspense: true,
     })
 
     if (isLoading) {
@@ -338,113 +339,123 @@ export default function WetCompare() {
     }
 
     return (
-        <div className="font-paperlogy bg-gradient-to-r from-[#000046] to-[#1CB5E0] min-h-screen">
-            <div className="p-2">
-                <Menu />
-            </div>
-            <GoBackButton onClick={handleClick} />
-            <div className="container py-14 lg:py-28">
-                {isOn ? (
-                    <div className="gap-4 md:gap-6 lg:gap-8">
-                        <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8 grid-rows-[1fr]">
-                            <div className="text-center col-span-1">
-                                <ProductDetailCard className="text-red-900 bg-red-500 h-full">
-                                    <span className="flex justify-end text-xl text-white">
-                                        {foodB.구분}
-                                    </span>
-                                    <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold">
-                                        <Link href={`/wetfoods/${foodA.id}`}>
-                                            {foodA.제품명}
-                                        </Link>
-                                    </h1>
-                                    <h2 className="text-lg md:text-xl lg:text-2xl font-semibold py-2 md:py-3 lg:py-5">
-                                        {foodA.브랜드}
-                                    </h2>
-                                </ProductDetailCard>
-                            </div>
-                            <div className="text-center col-span-1">
-                                <ProductDetailCard className="bg-blue-500 text-blue-900 text-center h-full">
-                                    <span className="flex justify-end text-xl text-white">
-                                        {foodB.구분}
-                                    </span>
-                                    <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold">
-                                        <Link href={`/wetfoods/${foodB.id}`}>
-                                            {foodB.제품명}
-                                        </Link>
-                                    </h1>
-                                    <h2 className="text-lg md:text-xl lg:text-2xl font-semibold py-2 md:py-3 lg:py-5">
-                                        {foodB.브랜드}
-                                    </h2>
-                                </ProductDetailCard>
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-4 gap-4 md:gap-6 lg:gap-8 mt-8">
-                            <div className="grid col-span-4 md:col-span-2 grid-cols-2 gap-4 md:gap-8 justify-center items-center">
-                                {CompareItemA(foodA, foodB, '조단백(DM)')}
-                                {CompareItemA(foodA, foodB, '조지방(DM)')}
-                                {CompareItemA(foodA, foodB, '칼슘(DM)')}
-                                {CompareItemA(foodA, foodB, '인')}
-                                {CompareItemA(foodA, foodB, '나트륨(DM)')}
-                                {CompareItemA(foodA, foodB, '수분')}
-                            </div>
-                            <div className="flex flex-col gap-8 col-span-4 md:col-span-2">
-                                <div className="grid grid-cols-1 gap-4 md:gap-8">
-                                    <ProductDetailCard>
-                                        <div className="grid grid-cols-1 md:grid-cols-4 justify-between items-center gap-4">
-                                            <div className="flex flex-col md:col-span-2 justify-center items-center">
-                                                <FeedPriceChart
-                                                    value={Math.abs(
-                                                        calComparison,
-                                                    )}
-                                                    maxValue={100}
-                                                    size={150}
-                                                />
-
-                                                {/* <div className="flex justify-center text-2xl">
-                                                {calComparison} %
-                                            </div> */}
-                                            </div>
-                                            <div className="md:col-span-2 flex justify-center text-center gap-8">
-                                                <div>
-                                                    <p className="font-extrabold text-red-500 text-center text-4xl lg:text-5xl">
-                                                        {caloriesPer100FoodA}
-                                                    </p>
-                                                    <p className="text-4xl font-extralight text-center text-gray-800">
-                                                        kcal
-                                                    </p>
-                                                </div>
-                                                <div>
-                                                    <p className="font-extrabold text-blue-500 text-center text-4xl lg:text-5xl">
-                                                        {caloriesPer100FoodB}
-                                                    </p>
-                                                    <p className="text-4xl font-extralight text-center text-gray-800">
-                                                        kcal
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+        <Suspense fallback={<div>suspense 로딩</div>}>
+            <div className="font-paperlogy bg-gradient-to-r from-[#000046] to-[#1CB5E0] min-h-screen">
+                <div className="p-2">
+                    <Menu />
+                </div>
+                <GoBackButton onClick={handleClick} />
+                <div className="container py-14 lg:py-28">
+                    {isOn ? (
+                        <div className="gap-4 md:gap-6 lg:gap-8">
+                            <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8 grid-rows-[1fr]">
+                                <div className="text-center col-span-1">
+                                    <ProductDetailCard className="text-red-900 bg-red-500 h-full">
+                                        <span className="flex justify-end text-xl text-white">
+                                            {foodB.구분}
+                                        </span>
+                                        <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold">
+                                            <Link
+                                                href={`/wetfoods/${foodA.id}`}
+                                            >
+                                                {foodA.제품명}
+                                            </Link>
+                                        </h1>
+                                        <h2 className="text-lg md:text-xl lg:text-2xl font-semibold py-2 md:py-3 lg:py-5">
+                                            {foodA.브랜드}
+                                        </h2>
                                     </ProductDetailCard>
-                                    <ProductDetailCard>
-                                        <div>{EtcPrint(foodA, foodB)}</div>
+                                </div>
+                                <div className="text-center col-span-1">
+                                    <ProductDetailCard className="bg-blue-500 text-blue-900 text-center h-full">
+                                        <span className="flex justify-end text-xl text-white">
+                                            {foodB.구분}
+                                        </span>
+                                        <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold">
+                                            <Link
+                                                href={`/wetfoods/${foodB.id}`}
+                                            >
+                                                {foodB.제품명}
+                                            </Link>
+                                        </h1>
+                                        <h2 className="text-lg md:text-xl lg:text-2xl font-semibold py-2 md:py-3 lg:py-5">
+                                            {foodB.브랜드}
+                                        </h2>
                                     </ProductDetailCard>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                ) : (
-                    <>
-                        <ProductDetailCard className="overflow-x-auto">
-                            <CompareTable
-                                product1={foodA}
-                                product2={foodB}
-                                isOn={false}
-                            />
-                        </ProductDetailCard>
-                    </>
-                )}
+                            <div className="grid grid-cols-4 gap-4 md:gap-6 lg:gap-8 mt-8">
+                                <div className="grid col-span-4 md:col-span-2 grid-cols-2 gap-4 md:gap-8 justify-center items-center">
+                                    {CompareItemA(foodA, foodB, '조단백(DM)')}
+                                    {CompareItemA(foodA, foodB, '조지방(DM)')}
+                                    {CompareItemA(foodA, foodB, '칼슘(DM)')}
+                                    {CompareItemA(foodA, foodB, '인')}
+                                    {CompareItemA(foodA, foodB, '나트륨(DM)')}
+                                    {CompareItemA(foodA, foodB, '수분')}
+                                </div>
+                                <div className="flex flex-col gap-8 col-span-4 md:col-span-2">
+                                    <div className="grid grid-cols-1 gap-4 md:gap-8">
+                                        <ProductDetailCard>
+                                            <div className="grid grid-cols-1 md:grid-cols-4 justify-between items-center gap-4">
+                                                <div className="flex flex-col md:col-span-2 justify-center items-center">
+                                                    <FeedPriceChart
+                                                        value={Math.abs(
+                                                            calComparison,
+                                                        )}
+                                                        maxValue={100}
+                                                        size={150}
+                                                    />
 
-                <ToggleButton isOn={isOn} toggleSwitch={toggleSwitch} />
+                                                    {/* <div className="flex justify-center text-2xl">
+                                                {calComparison} %
+                                            </div> */}
+                                                </div>
+                                                <div className="md:col-span-2 flex justify-center text-center gap-8">
+                                                    <div>
+                                                        <p className="font-extrabold text-red-500 text-center text-4xl lg:text-5xl">
+                                                            {
+                                                                caloriesPer100FoodA
+                                                            }
+                                                        </p>
+                                                        <p className="text-4xl font-extralight text-center text-gray-800">
+                                                            kcal
+                                                        </p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="font-extrabold text-blue-500 text-center text-4xl lg:text-5xl">
+                                                            {
+                                                                caloriesPer100FoodB
+                                                            }
+                                                        </p>
+                                                        <p className="text-4xl font-extralight text-center text-gray-800">
+                                                            kcal
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ProductDetailCard>
+                                        <ProductDetailCard>
+                                            <div>{EtcPrint(foodA, foodB)}</div>
+                                        </ProductDetailCard>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        <>
+                            <ProductDetailCard className="overflow-x-auto">
+                                <CompareTable
+                                    product1={foodA}
+                                    product2={foodB}
+                                    isOn={false}
+                                />
+                            </ProductDetailCard>
+                        </>
+                    )}
+
+                    <ToggleButton isOn={isOn} toggleSwitch={toggleSwitch} />
+                </div>
             </div>
-        </div>
+        </Suspense>
     )
 }
