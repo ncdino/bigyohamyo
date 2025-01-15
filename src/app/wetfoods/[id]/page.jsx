@@ -97,10 +97,8 @@ export default function WetFoodDetail({ params: paramsPromise }) {
     const router = useRouter()
     const [isOn, setIsOn] = useState(true)
     const toggleSwitch = () => setIsOn(!isOn)
-    const [capSize, setCapSize] = useState(200)
     const [svgSize, setSvgSize] = useState(90)
     const [nutSize, setNutSize] = useState(70)
-    const [feedSize, setFeedSize] = useState(50)
 
     useEffect(() => {
         const handleResize = () => {
@@ -110,26 +108,25 @@ export default function WetFoodDetail({ params: paramsPromise }) {
                 setSvgSize(80)
                 setNutSize(70)
             } else if (width < 768) {
-                setCapSize(32) // md breakpoint
+                setCapSize(32)
                 setSvgSize(200)
                 setNutSize(80)
             } else if (width < 1200) {
-                setCapSize(32) // lg breakpoint
+                setCapSize(32) 
                 setSvgSize(200)
                 setNutSize(180)
             } else {
-                setCapSize(60) // default size for larger screens
+                setCapSize(60)
                 setSvgSize(200)
                 setNutSize(180)
             }
         }
 
-        handleResize() // 초기 사이즈 설정
+        handleResize()
         window.addEventListener('resize', handleResize)
         return () => window.removeEventListener('resize', handleResize)
     }, [])
 
-    // Query to fetch a single product by ID
     const {
         data: food,
         isLoading,

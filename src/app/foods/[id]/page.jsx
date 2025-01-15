@@ -155,8 +155,6 @@ export default function FoodDetail({ params: paramsPromise }) {
     const params = usePromise(paramsPromise)
     const { id } = params
 
-    const food = searchData.find((item) => String(item.id) === id)
-
     const router = useRouter()
 
     const [isOn, setIsOn] = useState(true)
@@ -164,14 +162,6 @@ export default function FoodDetail({ params: paramsPromise }) {
     const [capSize, setCapSize] = useState(200)
     const [svgSize, setSvgSize] = useState(90)
     const [nutSize, setNutSize] = useState(70)
-
-    if (!food) {
-        return <div>사료 정보를 찾을 수 없습니다.</div>
-    }
-
-    function handleClick() {
-        router.back()
-    }
 
     useEffect(() => {
         const handleResize = () => {
@@ -199,6 +189,24 @@ export default function FoodDetail({ params: paramsPromise }) {
         window.addEventListener('resize', handleResize)
         return () => window.removeEventListener('resize', handleResize)
     }, [])
+
+    const {
+        data: food,
+        isLoading,
+        isError,
+    } = useQuery({
+        queryKey: ['dryFood', id],
+        queryFn: () =>
+            Promise.resolve(searchData.find((item) => String(item.id) === id)),
+        staleTime: 60 * 60 * 1000,
+    })
+
+    if (isLoading) return <div></div>
+    if (isError || !food) return <div>사료 정보를 찾을 수 없습니다.</div>
+
+    function handleClick() {
+        router.back()
+    }
 
     return (
         <div className="font-paperlogy bg-gradient-to-r from-[#f857a6] to-[#ff5858] min-h-screen items-center relative tracking-tighter">
