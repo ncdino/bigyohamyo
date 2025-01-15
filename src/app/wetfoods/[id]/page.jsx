@@ -104,19 +104,15 @@ export default function WetFoodDetail({ params: paramsPromise }) {
         const handleResize = () => {
             const width = window.innerWidth
             if (width < 375) {
-                setCapSize(32) // sm breakpoint
                 setSvgSize(80)
                 setNutSize(70)
             } else if (width < 768) {
-                setCapSize(32)
                 setSvgSize(200)
                 setNutSize(80)
             } else if (width < 1200) {
-                setCapSize(32) 
                 setSvgSize(200)
                 setNutSize(180)
             } else {
-                setCapSize(60)
                 setSvgSize(200)
                 setNutSize(180)
             }
