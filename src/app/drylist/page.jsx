@@ -23,15 +23,11 @@ async function fetchFoodData(searchTerm = '', filters = {}, sort = '') {
         )
     }
 
-    Object.keys(filters).forEach((key) => {
-        if (filters[key]) {
-            if (key === '브랜드') {
-                data = data.filter((item) => item['브랜드'] === filters[key])
-            } else {
-                data = data.filter((item) => item[key] === filters[key])
-            }
-        }
-    })
+    data = Object.entries(filters).reduce((filteredData, [key, value]) => {
+        return value
+            ? filteredData.filter((item) => item[key] === value)
+            : filteredData
+    }, data)
 
     // 정렬 algo
     if (sort) {
@@ -129,16 +125,15 @@ export default function DryList() {
     })
 
     const debouncedFetchData = useCallback(
-        debounce(() => {
-            refetch()
+        debounce((searchTerm, filters, sort) => {
+            refetch({ queryKey: ['dryFood', filters, sort] })
         }, 500),
-        [refetch],
+        [],
     )
 
     useEffect(() => {
-        debouncedFetchData()
+        debouncedFetchData(searchTerm, filters, sort)
     }, [filters, sort, searchTerm, debouncedFetchData])
-
     const itemCount = [food1, food2].filter(Boolean).length
 
     if (isLoading) return <div>로딩중</div>
